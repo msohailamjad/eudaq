@@ -3,6 +3,8 @@ if(WIN32)
     return()
 endif()
 
+#list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
+
 set(CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 set(ROOT_DIR $ENV{ROOTSYS}/cmake)
 #set(CMAKE_PREFIX_PATH ${ROOTSYS})
