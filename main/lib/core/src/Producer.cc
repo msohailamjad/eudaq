@@ -16,7 +16,10 @@ namespace eudaq {
       m_cli_run=false;
     else
       m_cli_run=true;
+    std::cout << m_cli_run << std::endl;
+
   }
+
 
   void Producer::OnInitialise(){
     EUDAQ_INFO(GetFullName() + " is to be initialised...");
@@ -158,18 +161,76 @@ namespace eudaq {
     }
   }
 
-  
-  void Producer::Exec(){
-    std::cout << " CLI Run Check: " << m_cli_run << std::endl;
+  void Producer::OLrun(){
+  m_exit=false;
+      while(!m_exit){
+	std::string pathini;
+	std::string pathconfig;
+	uint32_t nrun;
+	std::string param;
+	std::string cmd;
+	std::getline(std::cin, cmd);
+	size_t i = cmd.find('\0');
+	if (i != std::string::npos) {
+	  param = std::string(cmd, i + 1);
+	  cmd = std::string(cmd,0,i);
+	}
+	if (cmd == "init") {
+	  std::cout << " Path to Initialize file : " << std::endl;
+	  std::cin >> pathini;
+	  ReadInitializeFile(pathini);
+	  //  ReadInitializeFile("Ex0.ini");
+	  OnInitialise();
+	} else if (cmd == "status"){
+	  OnStatus();
+	} else if (cmd == "config"){
+	  std::cout << " Path to Configure file : " << std::endl;
+	  std::cin >> pathconfig;
+	  ReadConfigureFile(pathconfig);
+	  //  ReadConfigureFile("Ex0.conf");
+	  OnConfigure();
+	} else if (cmd == "start") {
+	  std::cout << "Please Enter Run Number " << std::endl;
+	  std::cin >> nrun; 
+	  SetRunN(from_string(param,nrun));
+	  OnStartRun();
+	} else if (cmd == "stop") {
+	  OnStopRun();
+	} else if (cmd == "quit" || cmd == "exit") {
+	  OnTerminate();
+	  m_exit = true;
+	} else if (cmd == "reset") {
+	  OnReset();
+	  //	  std::cout << " Status reset to UnInitialized." << std::endl;
+	} else if (cmd == "help") {
+	  std::cout << "--- Commands ---\n"
+		    << "init [file] Initialize clients (with file 'file')\n"
+		    << "config [file] Configure clients (with file 'file')\n"
+		    << "reset        Reset\n"
+		    << "start [n]    Begin Run (with run number)\n"
+		    << "stop        End Run\n"
+		    << "quit        Quit\n"
+		    << "help        Display this help\n"
+		    << "----------------" << std::endl;
+	} else if (cmd == "status") {
+	  // TODO. 
+	} else {
+	  OnUnrecognised(cmd, param);
+	}
+      }
+  }
+  /*void Producer::Exec(){
     if(!m_cli_run){
-    StartCommandReceiver();
-    while(IsActiveCommandReceiver()){
-      std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    }
-    }
-    else {
+      StartCommandReceiver();
+      while(IsActiveCommandReceiver()){
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+      }
 
-       m_exit=false;
+    }
+
+    else {
+      //      if(m_cli_run)   std::cout << " CLI Run Check: " << m_cli_run << std::endl;
+      m_exit=false;
       while(!m_exit){
 	std::string pathini;
 	std::string pathconfig;
@@ -228,7 +289,7 @@ namespace eudaq {
       
     }
 
-  }
+    } */
   
   void Producer::SendEvent(EventSP ev){
     if(ev->IsBORE()){

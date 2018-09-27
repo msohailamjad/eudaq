@@ -44,6 +44,7 @@ namespace eudaq {
     virtual void DoStatus(){};
 
     void Exec();
+    void OLrun();
     void WriteEvent(EventUP ev);
 
 

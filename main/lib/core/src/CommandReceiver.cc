@@ -22,11 +22,13 @@ namespace eudaq {
     : m_type(type), m_name(name), m_exit(false), m_exited(false), m_is_connected(false), m_is_runlooping(false), m_addr_runctrl(runcontrol){
     if(runcontrol.empty())
       return;
+    std::cout << "RC at " << runcontrol << std::endl;
     uint64_t addr = static_cast<uint64_t>(reinterpret_cast<std::uintptr_t>(this));
     m_cmdrcv_id = static_cast<uint32_t>((addr>>32)+(addr<<32)+addr);
     int i = 0;
     while (true){
       try {
+	//	if(!runcontrol.empty())
 	m_cmdclient = std::unique_ptr<TransportClient>( TransportClient::CreateClient(runcontrol));
 	if (!m_cmdclient->IsNull()) {
 	  std::string packet;
