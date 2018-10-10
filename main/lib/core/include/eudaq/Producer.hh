@@ -43,7 +43,10 @@ namespace eudaq {
     void SendEvent(EventSP ev);
     static ProducerSP Make(const std::string &code_name, const std::string &run_name,
 			   const std::string &runcontrol);
-
+    void OfflineRun();    
+    void SetRunN(uint32_t n){m_run_n = n;};
+    //    void ReadConfigureFile(const std::string &path);
+    //    void ReadInitilizeFile(const std::string &path);
   private:
     void OnInitialise() override final;
     void OnConfigure() override final;
@@ -52,12 +55,15 @@ namespace eudaq {
     void OnReset() override final;
     void OnTerminate() override final;
     void OnStatus() override;
-    
+
   private:
     uint32_t m_pdc_n;
     uint32_t m_evt_c;
+    uint32_t m_run_n;
     std::mutex m_mtx_sender;
     std::map<std::string, std::shared_ptr<DataSender>> m_senders;
+    bool m_exit;
+
   };
   //----------DOC-MARK-----ENDDECLEAR-----DOC-MARK----------
 }

@@ -8,10 +8,13 @@ int main(int /*argc*/, const char **argv) {
 				  "The eudaq application to be launched");
   eudaq::Option<std::string> tname(op, "t", "tname", "", "string",
 				  "Runtime name of the eudaq application");
-  eudaq::Option<std::string> rctrl(op, "r", "runcontrol", "tcp://localhost:44000", "address",
-  				   "The address of the run control to connect to");
+  eudaq::Option<std::string> rctrl(op, "r", "runcontrol", "", "address",
+				   "The address of the run control to connect to");
+  //  eudaq::Option<std::string> rctrl(op, "r", "runcontrol", "tcp://localhost:44000", "address",
+  //  				   "The address of the run control to connect to");
   try{
     op.Parse(argv);
+
   }
   catch(...){
     std::ostringstream err;
@@ -28,13 +31,14 @@ int main(int /*argc*/, const char **argv) {
     return -1;
   }  
   try{
-    //    std::cout << rctrl_value << std::endl;
-    //    if(!rctrl_value.empty())
+    std::string rctrl_value = rctrl.Value();
+    std::cout << rctrl_value << std::endl;
+    if(!rctrl_value.empty())
       app->Connect();
-      /*    else if(rctrl_value.empty()) {
+    else if(rctrl_value.empty()) {
       std::cout << "Offline Run? " << std::endl;
-      app->OLrun();
-      }*/
+      app->OfflineRun();
+      }
   }
   catch (...){
     std::cout<<"Can not connect to RunControl at "<<rctrl.Value()<<std::endl;

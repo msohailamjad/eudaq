@@ -150,7 +150,9 @@ namespace eudaq {
       SetStatus(Status::STATE_ERROR, "Status Error");
     }
   }
-  /*  void Producer::OLrun(){
+ void Producer::OfflineRun(){
+
+   std::cout << " Yes, It is an  Offline Run! " << std::endl; 
       m_exit=false;
       while(!m_exit){
       std::string pathini;
@@ -165,32 +167,31 @@ namespace eudaq {
 	  cmd = std::string(cmd,0,i);
 	}
 	if (cmd == "init") {
-	  std::cout << " Path to Initialize file : " << std::endl;
+	  std::cout << " Path to Initalize file : " << std::endl;
 	  std::cin >> pathini;
-	  ReadInitializeFile(pathini);
-	  //  ReadInitializeFile("Ex0.ini");
-	  OnInitialise();
+	  //  RunControl:: ReadInitilizeFile(pathini);
+	  Producer::OnInitialise();
 	} else if (cmd == "status"){
 	  OnStatus();
 	} else if (cmd == "config"){
 	  std::cout << " Path to Configure file : " << std::endl;
 	  std::cin >> pathconfig;
-	  ReadConfigureFile(pathconfig);
-	  //  ReadConfigureFile("Ex0.conf");
-	  OnConfigure();
+	  //	  ReadConfigureFile(pathconfig);
+	  Producer::OnConfigure();
 	} else if (cmd == "start") {
-	  std::cout << "Please Enter Run Number " << std::endl;
-	  std::cin >> nrun; 
-	  SetRunN(from_string(param,nrun));
-	  OnStartRun();
+	  /*std::cout << "Please Enter Run Number " << std::endl;
+	    std::cin >> nrun; 
+	    SetRunN(from_string(param,nrun));*/
+	  SetRunN(56789);
+	  Producer::OnStartRun();
 	} else if (cmd == "stop") {
-	  OnStopRun();
+	  Producer::OnStopRun();
 	} else if (cmd == "quit" || cmd == "exit") {
-	  OnTerminate();
+	  Producer::OnTerminate();
 	  m_exit = true;
 	} else if (cmd == "reset") {
-	  OnReset();
-	  //	  std::cout << " Status reset to UnInitialized." << std::endl;
+	  Producer::OnReset();
+	   //	  std::cout << " Status reset to UnInitialized." << std::endl;
 	} else if (cmd == "help") {
 	  std::cout << "--- Commands ---\n"
 		    << "init [file] Initialize clients (with file 'file')\n"
@@ -202,13 +203,12 @@ namespace eudaq {
 		    << "help        Display this help\n"
 		    << "----------------" << std::endl;
 	} else if (cmd == "status") {
-	  // TODO. 
+            Producer::OnStatus();
 	} else {
-	  OnUnrecognised(cmd, param);
+	  //TODO	  OnUnrecognised(cmd, param);
 	}
       }
-      } */
-  
+ }
   void Producer::SendEvent(EventSP ev){
     if(ev->IsBORE()){
       if(GetConfiguration())

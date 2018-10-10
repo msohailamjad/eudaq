@@ -123,6 +123,7 @@ namespace eudaq {
 	SetStatusMsg(msg);
 	SendStatus();
 	if((std::chrono::steady_clock::now()-tp_user_return) > std::chrono::seconds(20)){
+	  //	  std::cout << " Now - User Return : " << tp_user_return << std::endl;
 	  EUDAQ_THROW("CommandReceiver: Unable to stop the user's RunLoop");
 	}
       }
